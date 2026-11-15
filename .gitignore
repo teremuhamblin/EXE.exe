@@ -1,0 +1,23 @@
+# Binaires compilés (distribués via GitHub Releases)
+*.exe
+*.dll
+*.pdb
+*.manifest.bak
+
+# Dossiers de build Visual Studio / .NET
+bin/
+obj/
+.vs/
+out/
+Debug/
+Release/
+x64/
+x86/
+
+# Fichiers utilisateur & logs locaux
+*.user
+*.suo
+*.log
+*.tmp
+Thumbs.db
+desktop.ini
