@@ -93,22 +93,22 @@ build.bat
 
 ## 🤝 Gouvernance & sécurité
 
-* 📜 Licence :
+>> 📜 Licence :
 - [MIT](LICENSE)
 
-* 📝 Historique des versions :
+>> 📝 Historique des versions :
 - [VERSION.md](.github/VERSION.md)
 
-* 👥 Mainteneurs :
+>> 👥 Mainteneurs :
 - [MAINTAINERS.md](.github/MAINTAINERS.md)
 
-* 🛠️ Contribuer :
+>> 🛠️ Contribuer :
 - [CONTRIBUTING.md](.github/CONTRIBUTING.md)
 
-* 🚨 Signaler une faille :
+>> 🚨 Signaler une faille :
 - [SECURITY.md](.github/SECURITY.md)
 
-* 🤝 Charte de la communauté :
+>> 🤝 Charte de la communauté :
 - [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md)
 
 <div align="center">
