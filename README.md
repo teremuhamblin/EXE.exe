@@ -7,9 +7,9 @@
 **Inspiré du concept historique *AntiNuke.exe* (1997), modernisé pour contrer les vers, ransomwares, RAT et scans réseau sous Windows 10/11.**
 
 [![GitHub Release](https://img.shields.io/github/v/release/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&logo=github&color=crimson)](https://github.com/teremuhamblin/EXE.exe/releases)
-[![Dernier Commit](https://img.shields.io/github/last-commit/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&logo=git&color=blue)](https://github.com/VOTRE_PSEUDO/EXE-Shield/commits)
-[![GitHub Stars](https://img.shields.io/github/stars/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=gold)](https://github.com/VOTRE_PSEUDO/EXE-Shield/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=orange)](https://github.com/VOTRE_PSEUDO/EXE-Shield/issues)
+[![Dernier Commit](https://img.shields.io/github/last-commit/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&logo=git&color=blue)](https://github.com/teremuhamblin/EXE.exe/commits)
+[![GitHub Stars](https://img.shields.io/github/stars/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=gold)](https://github.com/teremuhamblin/EXE.exe/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=orange)](https://github.com/teremuhamblin/EXE.exe/issues)
 [![Licence](https://img.shields.io/github/license/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=brightgreen)](LICENSE)
 
 ![Plateforme](https://img.shields.io/badge/Plateforme-Windows%2010%20%2F%2011-0078D6?style=flat-square&logo=windows)
@@ -73,8 +73,8 @@ En 1997, l'utilitaire néo-zélandais **`AntiNuke.exe`** protégeait les PC cont
 Aucune installation de Visual Studio ou de SDK n'est requise : Windows intègre déjà le compilateur C# (`csc.exe`).
 
 ```bat
-git clone https://github.com/VOTRE_PSEUDO/EXE-Shield.git
-cd EXE-Shield
+git clone https://github.com/teremuhamblin/EXE.exe.git
+cd EXE.exe
 build.bat
 ```
 
