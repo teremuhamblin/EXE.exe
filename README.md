@@ -93,12 +93,23 @@ build.bat
 
 ## 🤝 Gouvernance & sécurité
 
-* 📜 Licence : [MIT](LICENSE)
-* 📝 Historique des versions : [VERSION.md](VERSION.md)
-* 👥 Mainteneurs : [MAINTAINERS.md](MAINTAINERS.md)
-* 🛠️ Contribuer : [CONTRIBUTING.md](CONTRIBUTING.md)
-* 🚨 Signaler une faille : [SECURITY.md](SECURITY.md)
-* 🤝 Charte de la communauté : [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+* 📜 Licence :
+- [MIT](LICENSE)
+
+* 📝 Historique des versions :
+- [VERSION.md](.github/VERSION.md)
+
+* 👥 Mainteneurs :
+- [MAINTAINERS.md](.github/MAINTAINERS.md)
+
+* 🛠️ Contribuer :
+- [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+
+* 🚨 Signaler une faille :
+- [SECURITY.md](.github/SECURITY.md)
+
+* 🤝 Charte de la communauté :
+- [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md)
 
 <div align="center">
 <sub>Fait avec 🛡️ pour une défense réseau simple, transparente et open-source.</sub>
