@@ -1,0 +1,100 @@
+name: "🐞 Rapport de Bug / Erreur"
+description: "Signaler un dysfonctionnement, un crash ou une erreur de compilation (csc.exe / build.bat)"
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci d'aider à stabiliser **EXE.exe (`Encrypted_X-Environnement`)** 🛡️.
+        ⚠️ *Si vous avez découvert une faille de sécurité critique, n'ouvrez pas d'issue publique : consultez `SECURITY.md`.*
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: "Version d'EXE.exe"
+      description: "Quelle version utilisez-vous ?"
+      options:
+        - "v1.4 Stable"
+        - "Build local depuis main (build.bat)"
+        - "Version antérieure (< v1.4)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: "Système d'exploitation"
+      options:
+        - "Windows 11 (24H2 / 23H2)"
+        - "Windows 10 (22H2)"
+        - "Autre version Windows"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: "Module concerné"
+      description: "Quel composant de EXE.exe semble affecté ?"
+      options:
+        - "Pièges TCP / UDP (Honeypots)"
+        - "Inspection Noyau (iphlpapi.dll)"
+        - "Auto-Blocage Pare-feu (netsh advfirewall)"
+        - "Durcissement Anti-Vers (NetBIOS / SMB / RPC / RDP / Telnet)"
+        - "Moniteur de Processus (Temp / Public / $Recycle.Bin & SHA-256)"
+        - "Barre des tâches (System Tray) / Notifications Toast"
+        - "Compilation (build.bat / csc.exe)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: admin_rights
+    attributes:
+      label: "Privilèges d'exécution"
+      description: "EXE.exe requiert les droits Administrateur pour les sockets et le Pare-feu Windows."
+      options:
+        - "Oui — Lancé en tant qu'Administrateur (UAC accepté)"
+        - "Non — Droits utilisateur standard"
+        - "Inconnu"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description du problème"
+      description: "Décrivez clairement ce qui s'est passé et le comportement que vous attendiez."
+      placeholder: "Ex : Lors de l'activation du durcissement anti-vers, la règle SMB retourne une erreur netsh..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Étapes pour reproduire"
+      placeholder: |
+        1. Lancer build.bat puis EXE.exe en Administrateur
+        2. Activer le module '...'
+        3. Observer l'erreur...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs, erreur csc.exe ou sortie console"
+      description: "Collez ici les messages d'erreur éventuels (sans exposer d'informations personnelles sensibles)."
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Vérifications"
+      options:
+        - label: "J'ai vérifié que le problème n'est pas déjà signalé dans les issues existantes."
+          required: true
+        - label: "J'accepte de respecter la charte CODE_OF_CONDUCT.md du projet."
+          required: true
