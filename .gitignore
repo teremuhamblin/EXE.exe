@@ -1,23 +1,26 @@
-# Binaires compilés (distribués via GitHub Releases)
+# Binaires générés par build.bat / csc.exe
+EXE.exe
 *.exe
 *.dll
 *.pdb
-*.manifest.bak
+*.sha256
 
-# Dossiers de build Visual Studio / .NET
+# Exception : garder les éventuels outils/ressources explicites si besoin
+# !assets/
+
+# Dossiers de build Visual Studio / IDE (au cas où)
 bin/
 obj/
 .vs/
-out/
-Debug/
-Release/
-x64/
-x86/
-
-# Fichiers utilisateur & logs locaux
 *.user
 *.suo
+
+# Journaux et configurations locales utilisateur
+logs/
 *.log
-*.tmp
+*.csv
+exe.config.local.json
+
+# Fichiers système Windows
 Thumbs.db
-desktop.ini
+Desktop.ini
