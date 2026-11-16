@@ -44,6 +44,11 @@ En 1997, l'utilitaire néo-zélandais **`AntiNuke.exe`** protégeait les PC cont
 ## 🛡️ Fonctionnalités principales
 ### 📸 Aperçu en action
 
+<div align="center">
+  <img src="assets/srcshots/tray-alert.svg" alt="Interface EXE.exe et Notification Toast d'intrusion" width="250%" />
+  <img src="assets/srcshots/firewall-rules.svg" alt="Règles de blocage automatique Pare-feu Windows" width="250%" />
+</div>
+
 | Module | Rôle | Action automatique |
 | :--- | :--- | :--- |
 | 🕸️ **Pièges TCP / UDP** | Écoute directe sur les ports sensibles libres | Alerte immédiate + blocage IP |
