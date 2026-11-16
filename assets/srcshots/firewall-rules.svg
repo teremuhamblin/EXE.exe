@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 580" width="940" height="580">
   <!-- Fond principal -->
   <rect width="940" height="580" rx="8" fill="#14171F" stroke="#2D3342" stroke-width="2"/>
@@ -27,7 +28,6 @@
     <text x="860" y="145">Etat</text>
   </g>
 
-  <!-- Lignes du tableau -->
   <!-- Ligne 1 -->
   <rect x="20" y="162" width="900" height="44" fill="#181C26"/>
   <text x="34" y="189" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Block_185.220.101.42_IN</text>
@@ -82,4 +82,15 @@
   <rect x="20" y="392" width="900" height="44" fill="#141720"/>
   <text x="34" y="419" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_App_drop.exe_842910</text>
   <text x="318" y="419" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Sortie (OUT)</text>
-  <rect x="420" y="403" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="
+  <rect x="420" y="403" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="418" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="419" fill="#FDBA74" font-family="Consolas, Courier New, monospace" font-size="11">Programme : $Recycle.Bin</text>
+  <text x="725" y="419" fill="#9CA3AF" font-family="Segoe UI, Arial, sans-serif" font-size="11.5">Toutes IPs</text>
+  <text x="860" y="419" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Encadre resume en bas -->
+  <rect x="20" y="460" width="900" height="96" rx="6" fill="#1B202B" stroke="#2D3548" stroke-width="1"/>
+  <text x="36" y="486" fill="#93C5FD" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="bold">Isolation automatique via netsh advfirewall (Zéro dépendance externe)</text>
+  <text x="36" y="512" fill="#D1D5DB" font-family="Consolas, Courier New, monospace" font-size="11.5">&gt; netsh advfirewall firewall show rule name=all | findstr "EXE_Shield_"</text>
+  <text x="36" y="536" fill="#86EFAC" font-family="Segoe UI, Arial, sans-serif" font-size="12">Plages locales exclues du durcissement (LAN) : 10.0.0.0/8 • 172.16.0.0/12 • 192.168.0.0/16 • 127.0.0.0/8</text>
+</svg>
