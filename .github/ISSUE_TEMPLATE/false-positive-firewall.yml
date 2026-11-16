@@ -1,0 +1,57 @@
+name: "🧱 Faux Positif / Blocage Pare-feu ou LAN"
+description: "Signaler un blocage involontaire (réseau local LAN, application légitime, conflit antivirus)"
+title: "[False Positive]: "
+labels: ["false-positive", "firewall", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Utilisez ce formulaire si **EXE.exe** a bloqué à tort une connexion légitime, une ressource sur votre **réseau local (LAN)** ou un exécutable sûr.
+
+  - type: dropdown
+    id: trigger_module
+    attributes:
+      label: "Module ayant déclenché le blocage"
+      options:
+        - "Piège TCP / UDP (Honeypot)"
+        - "Inspection Noyau (iphlpapi.dll)"
+        - "Auto-Blocage IP (netsh advfirewall)"
+        - "Durcissement Anti-Vers (NetBIOS 137-139 / SMB 445 / RPC 135 / RDP 3389)"
+        - "Moniteur de Processus (Temp / Public / $Recycle.Bin)"
+    validations:
+      required: true
+
+  - type: input
+    id: target_info
+    attributes:
+      label: "Port, processus ou type de trafic bloqué"
+      description: "⚠️ Masquez toute IP publique ou donnée personnelle avant de poster."
+      placeholder: "Ex : Port 8081 utilisé par un serveur local de dev / installateur depuis AppData\\Local\\Temp"
+    validations:
+      required: true
+
+  - type: input
+    id: sha256
+    attributes:
+      label: "Empreinte SHA-256 (si déclenchée par le Moniteur de Processus)"
+      placeholder: "Ex : E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Contexte réseau et logiciel"
+      description: "Précisez votre configuration (partage imprimante LAN, NAS, VPN, jeu en ligne, outil d'administration, Microsoft Defender...)."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Confirmation"
+      options:
+        - label: "J'ai vérifié qu'aucune information confidentielle (IP publique, mot de passe, nom d'utilisateur) n'apparaît dans ce ticket."
+          required: true
+        - label: "J'accepte de respecter la charte CODE_OF_CONDUCT.md."
+          required: true
