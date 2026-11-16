@@ -1,5 +1,12 @@
 ###### README.md >> markdown
+
 ---
+
+[![CI Build](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml)
+
+---
+
 ##### Encrypted_X-Environnement
 #### v1.4 Stable
 <div align="center">
@@ -10,8 +17,6 @@
 **Inspiré du concept historique *AntiNuke.exe* (1997), modernisé pour contrer les vers, ransomwares, RAT et scans réseau sous Windows 10/11.**
 
 [![GitHub Release](https://img.shields.io/github/v/release/teremuhamblin/EXE.exe?style=for-the-badge&logo=github&color=blue)](https://github.com/teremuhamblin/EXE.exe/releases)
-[![CI Build](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml)
 [![Dernier Commit](https://img.shields.io/github/last-commit/teremuhamblin/EXE.exe?style=for-the-badge&logo=git&color=blue)](https://github.com/teremuhamblin/EXE.exe/commits)
 [![GitHub Stars](https://img.shields.io/github/stars/teremuhamblin/EXE.exe?style=for-the-badge&color=blue)](https://github.com/teremuhamblin/EXE.exe/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/teremuhamblin/EXE.exe?style=for-the-badge&color=blue)](https://github.com/teremuhamblin/EXE.exe/issues)
