@@ -44,9 +44,11 @@ En 1997, l'utilitaire néo-zélandais **`AntiNuke.exe`** protégeait les PC cont
 ## 🛡️ Fonctionnalités principales
 ### 📸 Aperçu en action
 
+## 📸 Aperçu en action
+
 <div align="center">
   <img src="assets/scrshots/tray-alert.svg" alt="Interface EXE.exe et Notification Toast d'intrusion" width="48%" />
-  <img src="assets/sccshots/firewall-rules.svg" alt="Règles de blocage automatique Pare-feu Windows" width="48%" />
+  <img src="assets/scrshots/firewall-rules.svg" alt="Règles de blocage automatique Pare-feu Windows" width="48%" />
 </div>
 
 | Module | Rôle | Action automatique |
