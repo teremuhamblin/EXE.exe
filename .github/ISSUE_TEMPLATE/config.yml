@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "🚨 Signaler une faille de sécurité (Confidentiel)"
+    url: "https://github.com/teremuhamblin/EXE.exe/blob/main/SECURITY.md"
+    about: "Ne publiez jamais une vulnérabilité critique dans une issue publique. Suivez la procédure SECURITY.md."
+  - name: "🛠️ Guide de contribution"
+    url: "https://github.com/teremuhamblin/EXE.exe/blob/main/CONTRIBUTING.md"
+    about: "Consultez les bonnes pratiques avant de soumettre du code ou une proposition de règle réseau."
+  - name: "📖 Documentation & Matrice des ports (README)"
+    url: "https://github.com/teremuhamblin/EXE.exe#readme"
+    about: "Vérifiez la liste des ports déjà protégés et les instructions de compilation build.bat (csc.exe)."
