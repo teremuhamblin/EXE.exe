@@ -1,0 +1,19 @@
+# Détection automatique par défaut
+* text=auto
+
+# Fichiers Windows (Batch, C#, Manifest) en CRLF
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.cs    text eol=crlf
+*.manifest text eol=crlf
+
+# Fichiers de config / GitHub / Docs en LF
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+
+# Fichiers binaires
+*.ico   binary
+*.png   binary
+*.jpg   binary
