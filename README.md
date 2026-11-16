@@ -1,5 +1,5 @@
 ###### README.md >> markdown
-#### v1.4
+#### v1.4 Stable
 <div align="center">
 
 # 🦠🛡️ EXE.exe
