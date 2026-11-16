@@ -1,10 +1,5 @@
 ###### README.md >> markdown
 ---
-
-[![CI — Build EXE.exe](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
-
----
-
 ##### Encrypted_X-Environnement
 #### v1.4 Stable
 <div align="center">
@@ -14,16 +9,13 @@
 
 **Inspiré du concept historique *AntiNuke.exe* (1997), modernisé pour contrer les vers, ransomwares, RAT et scans réseau sous Windows 10/11.**
 
-[![GitHub Release](https://img.shields.io/github/v/release/teremuhamblin/EXE.exe?style=for-the-badge&logo=github&color=flat-square)](https://github.com/teremuhamblin/EXE.exe/releases)
-[![Dernier Commit](https://img.shields.io/github/last-commit/teremuhamblin/EXE.exe?style=for-the-badge&logo=git&color=flat-square)](https://github.com/teremuhamblin/EXE.exe/commits)
-[![GitHub Stars](https://img.shields.io/github/stars/teremuhamblin/EXE.exe?style=for-the-badge&color=flat-square)](https://github.com/teremuhamblin/EXE.exe/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/teremuhamblin/EXE.exe?style=for-the-badge&color=flat-square)](https://github.com/teremuhamblin/EXE.exe/issues)
-[![Licence](https://img.shields.io/github/license/teremuhamblin/EXE.exe?style=for-the-badge&color=flat-square)](LICENSE)
-
-![Plateforme](https://img.shields.io/badge/Plateforme-Windows%2010%20%2F%2011-512BD4?style=flat-square&logo=windows)
-![Langage](https://img.shields.io/badge/Langage-C%23%20(.NET%20Framework%204.x)-512BD4?style=flat-square&logo=dotnet)
-![Dépendances](https://img.shields.io/badge/D%C3%A9pendances-Z%C3%A9ro%20externe-critical?style=flat-square)
-![Statut](https://img.shields.io/badge/Statut-Actif%20%26%20D%C3%A9fensif-critical?style=flat-square)
+[![GitHub Release](https://img.shields.io/github/v/release/teremuhamblin/EXE.exe?style=for-the-badge&logo=github&color=blue)](https://github.com/teremuhamblin/EXE.exe/releases)
+[![CI Build](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml)
+[![Dernier Commit](https://img.shields.io/github/last-commit/teremuhamblin/EXE.exe?style=for-the-badge&logo=git&color=blue)](https://github.com/teremuhamblin/EXE.exe/commits)
+[![GitHub Stars](https://img.shields.io/github/stars/teremuhamblin/EXE.exe?style=for-the-badge&color=blue)](https://github.com/teremuhamblin/EXE.exe/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/teremuhamblin/EXE.exe?style=for-the-badge&color=blue)](https://github.com/teremuhamblin/EXE.exe/issues)
+[![Licence](https://img.shields.io/github/license/teremuhamblin/EXE.exe?style=for-the-badge&color=blue)](LICENSE)
 
 ---
 
