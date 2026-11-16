@@ -1,0 +1,68 @@
+name: "🛡️ Proposition : Port, Menace ou Fonctionnalité"
+description: "Suggérer un nouveau port à surveiller, un vecteur de menace ou une amélioration d'EXE.exe"
+title: "[Feature]: "
+labels: ["enhancement", "security-rules"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposez une amélioration pour **EXE.exe (`Encrypted_X-Environnement`)**.
+        Rappel : le projet vise à rester **léger, transparent, 100 % C# (.NET Framework 4.x) et sans dépendance externe**.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Catégorie de la proposition"
+      options:
+        - "Ajout de port(s) dans les Pièges TCP / UDP (Honeypots)"
+        - "Amélioration Inspection Noyau (iphlpapi.dll / PID / C2)"
+        - "Renforcement Durcissement Anti-Vers (netsh advfirewall)"
+        - "Amélioration Moniteur de Processus / SHA-256"
+        - "Ergonomie Barre des tâches / Notifications Toast"
+        - "Script build.bat / Architecture C#"
+    validations:
+      required: true
+
+  - type: input
+    id: ports
+    attributes:
+      label: "Port(s) et Protocole(s) concernés (si applicable)"
+      description: "Précisez le ou les ports ainsi que TCP / UDP."
+      placeholder: "Ex : TCP 4445, UDP 1900"
+    validations:
+      required: false
+
+  - type: input
+    id: threat
+    attributes:
+      label: "Vecteur / Menace ciblée (si applicable)"
+      placeholder: "Ex : RAT, shell distant, propagation latérale de ver, ransomware..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: "Description détaillée de la proposition"
+      description: "Expliquez le fonctionnement attendu et l'intérêt pour la défense réseau."
+    validations:
+      required: true
+
+  - type: textarea
+    id: false_positive_risk
+    attributes:
+      label: "Risque de faux positifs / Impact LAN"
+      description: "Ce changement risque-t-il de bloquer des logiciels légitimes ou des services Windows courants ?"
+      placeholder: "Ex : Port utilisé uniquement par des malwares / utilisé aussi par tel logiciel..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: "Conformité architecturale"
+      options:
+        - label: "Cette proposition reste compatible avec une compilation native via csc.exe (.NET Framework 4.x) sans dépendance tierce."
+          required: true
+        - label: "J'accepte de respecter la charte CODE_OF_CONDUCT.md."
+          required: true
