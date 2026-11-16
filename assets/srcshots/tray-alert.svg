@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 580" width="940" height="580">
+  <defs>
+    <linearGradient id="toastBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#141821"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fond principal de la fenetre -->
+  <rect width="940" height="580" rx="8" fill="#181A20" stroke="#2D3342" stroke-width="2"/>
+
+  <!-- Barre de titre Windows -->
+  <rect x="0" y="0" width="940" height="32" rx="8" fill="#111318"/>
+  <rect x="0" y="20" width="940" height="12" fill="#111318"/>
+  <!-- Mini icone bouclier -->
+  <path d="M16 9 L24 12 V17 C24 21 20.5 24 16 25.5 C11.5 24 8 21 8 17 V12 Z" fill="#3B82F6" stroke="#93C5FD" stroke-width="1"/>
+  <text x="34" y="21" fill="#E5E7EB" font-family="Segoe UI, Arial, sans-serif" font-size="12">EXE.exe — Encrypted_X-Environnement (Bouclier Reseau Windows)</text>
+  <!-- Boutons fenetre -->
+  <text x="860" y="21" fill="#9CA3AF" font-family="Segoe UI, Arial, sans-serif" font-size="13">—</text>
+  <rect x="888" y="11" width="10" height="10" fill="none" stroke="#9CA3AF" stroke-width="1.2"/>
+  <text x="915" y="21" fill="#EF4444" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="bold">✕</text>
+
+  <!-- Panneau superieur (topPanel) -->
+  <rect x="1" y="32" width="938" height="98" fill="#20232C"/>
+  <line x1="0" y1="130" x2="940" y2="130" stroke="#2F3545" stroke-width="1"/>
+
+  <!-- Statut -->
+  <text x="14" y="54" fill="#90EE90" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="bold">Statut : PROTECTION ACTIVE (TCP/UDP 139 + Anti-Vers / Anti-RAT)</text>
+
+  <!-- Cases a cocher -->
+  <rect x="14" y="68" width="14" height="14" rx="2" fill="#3B82F6"/>
+  <path d="M17 75 L20 78 L25 72" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="34" y="80" fill="#F3F4F6" font-family="Segoe UI, Arial, sans-serif" font-size="12">Bloquer auto les IPs suspectes (Pare-feu)</text>
+
+  <rect x="295" y="68" width="14" height="14" rx="2" fill="#3B82F6"/>
+  <path d="M298 75 L301 78 L306 72" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="315" y="80" fill="#F3F4F6" font-family="Segoe UI, Arial, sans-serif" font-size="12">Ignorer le reseau local (LAN / Box)</text>
+
+  <rect x="14" y="94" width="14" height="14" rx="2" fill="#3B82F6"/>
+  <path d="M17 101 L20 104 L25 98" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="34" y="106" fill="#F3F4F6" font-family="Segoe UI, Arial, sans-serif" font-size="12">Surveiller processus &amp; scripts suspects</text>
+
+  <rect x="295" y="94" width="14" height="14" rx="2" fill="#181A20" stroke="#6B7280" stroke-width="1.5"/>
+  <text x="315" y="106" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Bloquer reseau des .exe dans Temp</text>
+
+  <!-- Boutons droite -->
+  <rect x="610" y="42" width="314" height="32" rx="3" fill="#B43737"/>
+  <text x="767" y="63" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Durcir Pare-feu (Bloquer SMB/139/RDP externes)</text>
+
+  <rect x="610" y="82" width="314" height="32" rx="3" fill="#3C4150"/>
+  <text x="767" y="103" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="12">Nettoyer les regles creees par EXE.exe</text>
+
+  <!-- Zone de logs gauche (RichTextBox) -->
+  <rect x="1" y="131" width="636" height="448" fill="#0F1115"/>
+  <line x1="638" y1="130" x2="638" y2="580" stroke="#2D3342" stroke-width="2"/>
+
+  <g font-family="Consolas, Courier New, monospace" font-size="11.5">
+    <text x="14" y="156"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#22D3EE">[INIT] Demarrage de EXE.exe (Encrypted_X-Environnement)...</tspan></text>
+    <text x="14" y="178"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#9CA3AF">[PIEGE TCP] Ecoute directe active sur le port 4444</tspan></text>
+    <text x="14" y="200"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#9CA3AF">[PIEGE TCP] Ecoute directe active sur le port 31337</tspan></text>
+    <text x="14" y="222"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#6B7280">[INFO] Port TCP 139 occupe par Windows -&gt; table noyau.</tspan></text>
+    <text x="14" y="244"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#6B7280">[INFO] Port TCP 445 occupe par Windows -&gt; table noyau.</tspan></text>
+    <text x="14" y="266"><tspan fill="#6B7280">[10:14:02] </tspan><tspan fill="#90EE90">[PRET] Surveillance NetBIOS (137-139), SMB (445), RDP (3389).</tspan></text>
+
+    <text x="14" y="302"><tspan fill="#6B7280">[10:14:19] </tspan><tspan fill="#FF5722">[ALERTE PORT 445] IP 185.220.101.42 via TCP-KERNEL (PID 4)</tspan></text>
+    <text x="14" y="324"><tspan fill="#6B7280">[10:14:19] </tspan><tspan fill="#EF4444">[BLOQUE] IP 185.220.101.42 bloquee en entree/sortie (Port 445).</tspan></text>
+
+    <text x="14" y="360"><tspan fill="#6B7280">[10:14:27] </tspan><tspan fill="#FF5722">[ALERTE PORT 31337] IP 45.155.205.91 via TCP-TRAP</tspan></text>
+    <text x="14" y="382"><tspan fill="#6B7280">[10:14:27] </tspan><tspan fill="#EF4444">[BLOQUE] IP 45.155.205.91 bloquee en entree/sortie (31337).</tspan></text>
+
+    <text x="14" y="418"><tspan fill="#6B7280">[10:14:35] </tspan><tspan fill="#90EE90">[DURCISSEMENT] Regles anti-vers appliquees (LAN preserve).</tspan></text>
+    <text x="14" y="454"><tspan fill="#6B7280">[10:14:41] </tspan><tspan fill="#F59E0B">[PROCESSUS SUSPECT] drop.exe lance depuis $Recycle.Bin | SHA256=8f4a...</tspan></text>
+    <text x="14" y="476"><tspan fill="#6B7280">[10:14:41] </tspan><tspan fill="#EF4444">[RESEAU COUPE] Acces sortant bloque pour C:\$Recycle.Bin\drop.exe</tspan></text>
+  </g>
+
+  <!-- Panneau droit (IPs bloquees) -->
+  <text x="652" y="152" fill="#F3F4F6" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">IPs bloquees cette session :</text>
+  <rect x="652" y="164" width="272" height="254" fill="#12141A" stroke="#374151" stroke-width="1"/>
+  <text x="662" y="188" fill="#FA8072" font-family="Consolas, Courier New, monospace" font-size="12">185.220.101.42 (Port 445)</text>
+  <text x="662" y="210" fill="#FA8072" font-family="Consolas, Courier New, monospace" font-size="12">45.155.205.91 (Port 31337)</text>
+
+  <!-- Notification Toast Windows 11 en bas a droite -->
+  <rect x="546" y="438" width="376" height="122" rx="10" fill="url(#toastBg)" stroke="#3B82F6" stroke-width="1.5"/>
+  <path d="M572 454 L580 457 V462 C580 466 576.5 469 572 470.5 C567.5 469 564 466 564 462 V457 Z" fill="#F59E0B"/>
+  <text x="588" y="467" fill="#9CA3AF" font-family="Segoe UI, Arial, sans-serif" font-size="11.5">EXE.exe • Bouclier Reseau Windows</text>
+  <text x="564" y="495" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="bold">Intrusion / Mouvement Port 445</text>
+  <text x="564" y="518" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12.5">IP 185.220.101.42 detectee (TCP-KERNEL)</text>
+  <text x="564" y="540" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="bold">Action : IP bloquee en entree/sortie (Pare-feu)</text>
+</svg>
