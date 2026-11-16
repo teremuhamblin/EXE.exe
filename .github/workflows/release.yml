@@ -1,0 +1,55 @@
+name: Release — Publication automatique EXE.exe
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Attachement Release
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 Récupération du code au tag
+        uses: actions/checkout@v7
+
+      - name: 🔧 Ajout de csc.exe au PATH
+        shell: pwsh
+        run: |
+          $cscDir = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
+          $cscDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: 🛠️ Compilation de EXE.exe
+        shell: cmd
+        run: |
+          call build.bat
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+
+      - name: 🔐 Génération du checksum SHA-256
+        shell: pwsh
+        run: |
+          if (-not (Test-Path ".\EXE.exe")) {
+            Write-Error "EXE.exe introuvable !"
+            exit 1
+          }
+          $hash = (Get-FileHash ".\EXE.exe" -Algorithm SHA256).Hash
+          "$hash  EXE.exe" | Out-File -FilePath ".\EXE.exe.sha256" -Encoding ascii
+
+      - name: 🚀 Création / Mise à jour de la GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag .\EXE.exe .\EXE.exe.sha256 --clobber
+          } else {
+            gh release create $tag .\EXE.exe .\EXE.exe.sha256 `
+              --title "🛡️ EXE.exe $tag — Encrypted_X-Environnement" `
+              --generate-notes
+          }
