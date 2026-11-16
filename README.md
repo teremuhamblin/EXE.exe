@@ -1,4 +1,10 @@
 ###### README.md >> markdown
+---
+
+[![CI — Build EXE.exe](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
+
+---
+
 ##### Encrypted_X-Environnement
 #### v1.4 Stable
 <div align="center">
