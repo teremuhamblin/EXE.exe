@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 580" width="940" height="580">
+  <!-- Fond principal -->
+  <rect width="940" height="580" rx="8" fill="#14171F" stroke="#2D3342" stroke-width="2"/>
+
+  <!-- Barre de titre -->
+  <rect x="0" y="0" width="940" height="36" rx="8" fill="#0F1117"/>
+  <rect x="0" y="24" width="940" height="12" fill="#0F1117"/>
+  <path d="M18 10 L26 13 V18 C26 22 22.5 25 18 26.5 C13.5 25 10 22 10 18 V13 Z" fill="#EF4444" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="36" y="23" fill="#F3F4F6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="bold">Pare-feu Windows Defender — Regles generees par EXE.exe</text>
+
+  <!-- Bandeau filtre / statut -->
+  <rect x="20" y="54" width="900" height="52" rx="6" fill="#1E222D" stroke="#2E3446" stroke-width="1"/>
+  <text x="36" y="77" fill="#9CA3AF" font-family="Segoe UI, Arial, sans-serif" font-size="11.5">FILTRE ACTIF</text>
+  <text x="36" y="96" fill="#22D3EE" font-family="Consolas, Courier New, monospace" font-size="13" font-weight="bold">DisplayName -like "EXE_Shield_*"</text>
+
+  <rect x="650" y="66" width="254" height="28" rx="14" fill="#132A1E" stroke="#22C55E" stroke-width="1"/>
+  <text x="777" y="84" text-anchor="middle" fill="#86EFAC" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">6 regles actives • LAN preserve</text>
+
+  <!-- En-tete du tableau -->
+  <rect x="20" y="122" width="900" height="36" rx="4" fill="#252A38"/>
+  <g fill="#E5E7EB" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">
+    <text x="34" y="145">Nom de la regle</text>
+    <text x="318" y="145">Direction</text>
+    <text x="420" y="145">Action</text>
+    <text x="515" y="145">Protocole / Ports</text>
+    <text x="725" y="145">IP Distante</text>
+    <text x="860" y="145">Etat</text>
+  </g>
+
+  <!-- Lignes du tableau -->
+  <!-- Ligne 1 -->
+  <rect x="20" y="162" width="900" height="44" fill="#181C26"/>
+  <text x="34" y="189" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Block_185.220.101.42_IN</text>
+  <text x="318" y="189" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Entree (IN)</text>
+  <rect x="420" y="173" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="188" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="189" fill="#9CA3AF" font-family="Consolas, Courier New, monospace" font-size="11.5">Tous les ports</text>
+  <text x="725" y="189" fill="#FA8072" font-family="Consolas, Courier New, monospace" font-size="11.5">185.220.101.42</text>
+  <text x="860" y="189" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Ligne 2 -->
+  <rect x="20" y="208" width="900" height="44" fill="#141720"/>
+  <text x="34" y="235" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Block_185.220.101.42_OUT</text>
+  <text x="318" y="235" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Sortie (OUT)</text>
+  <rect x="420" y="219" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="234" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="235" fill="#9CA3AF" font-family="Consolas, Courier New, monospace" font-size="11.5">Tous les ports</text>
+  <text x="725" y="235" fill="#FA8072" font-family="Consolas, Courier New, monospace" font-size="11.5">185.220.101.42</text>
+  <text x="860" y="235" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Ligne 3 -->
+  <rect x="20" y="254" width="900" height="44" fill="#181C26"/>
+  <text x="34" y="281" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Block_45.155.205.91_IN</text>
+  <text x="318" y="281" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Entree (IN)</text>
+  <rect x="420" y="265" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="280" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="281" fill="#9CA3AF" font-family="Consolas, Courier New, monospace" font-size="11.5">Tous les ports</text>
+  <text x="725" y="281" fill="#FA8072" font-family="Consolas, Courier New, monospace" font-size="11.5">45.155.205.91</text>
+  <text x="860" y="281" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Ligne 4 -->
+  <rect x="20" y="300" width="900" height="44" fill="#141720"/>
+  <text x="34" y="327" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Harden_TCP</text>
+  <text x="318" y="327" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Entree (IN)</text>
+  <rect x="420" y="311" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="326" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="327" fill="#FDE68A" font-family="Consolas, Courier New, monospace" font-size="11">TCP 23,135,137-139,445,3389</text>
+  <text x="725" y="327" fill="#93C5FD" font-family="Segoe UI, Arial, sans-serif" font-size="11.5">Externes (hors LAN)</text>
+  <text x="860" y="327" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Ligne 5 -->
+  <rect x="20" y="346" width="900" height="44" fill="#181C26"/>
+  <text x="34" y="373" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_Harden_UDP</text>
+  <text x="318" y="373" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Entree (IN)</text>
+  <rect x="420" y="357" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="1"/>
+  <text x="455" y="372" text-anchor="middle" fill="#FCA5A5" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="bold">BLOQUER</text>
+  <text x="515" y="373" fill="#FDE68A" font-family="Consolas, Courier New, monospace" font-size="11">UDP 137,138,139,3389</text>
+  <text x="725" y="373" fill="#93C5FD" font-family="Segoe UI, Arial, sans-serif" font-size="11.5">Externes (hors LAN)</text>
+  <text x="860" y="373" fill="#4ADE80" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="bold">Actif</text>
+
+  <!-- Ligne 6 -->
+  <rect x="20" y="392" width="900" height="44" fill="#141720"/>
+  <text x="34" y="419" fill="#F9FAFB" font-family="Consolas, Courier New, monospace" font-size="11.5">EXE_Shield_App_drop.exe_842910</text>
+  <text x="318" y="419" fill="#D1D5DB" font-family="Segoe UI, Arial, sans-serif" font-size="12">Sortie (OUT)</text>
+  <rect x="420" y="403" width="70" height="22" rx="4" fill="#451A1A" stroke="#EF4444" stroke-width="
