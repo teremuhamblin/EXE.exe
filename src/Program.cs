@@ -21,17 +21,31 @@ namespace ExeShield
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            if (!IsAdministrator())
+            bool createdNew;
+            using (Mutex singleInstanceMutex = new Mutex(true, "Global\\EXE_Shield_SingleInstance", out createdNew))
             {
-                MessageBox.Show(
-                    "EXE.exe doit etre execute en tant qu'Administrateur pour surveiller tous les ports et bloquer les menaces via le Pare-feu Windows.",
-                    "Droits Administrateur requis",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
+                if (!createdNew)
+                {
+                    MessageBox.Show(
+                        "EXE.exe est deja actif dans la barre des taches.",
+                        "EXE.exe deja en cours d'execution",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
 
-            Application.Run(new MainForm());
+                if (!IsAdministrator())
+                {
+                    MessageBox.Show(
+                        "EXE.exe doit etre execute en tant qu'Administrateur pour surveiller tous les ports et bloquer les menaces via le Pare-feu Windows.",
+                        "Droits Administrateur requis",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                Application.Run(new MainForm());
+            }
         }
 
         static bool IsAdministrator()
@@ -71,12 +85,22 @@ namespace ExeShield
             "mshta.exe", "wscript.exe", "cscript.exe", "regsvr32.exe", "powershell.exe", "cmd.exe"
         };
 
+        // Plages IPv4 externes (exclut Loopback, APIPA et LAN RFC 1918)
+        private const string ExternalIpv4Ranges =
+            "0.0.0.0-9.255.255.255," +
+            "11.0.0.0-126.255.255.255," +
+            "128.0.0.0-169.253.255.255," +
+            "169.255.0.0-172.15.255.255," +
+            "172.32.0.0-192.167.255.255," +
+            "192.169.0.0-255.255.255.255";
+
         // --- Interface graphique ---
         private RichTextBox logBox;
         private ListBox blockedIpList;
         private CheckBox chkAutoBlockIp;
         private CheckBox chkIgnoreLan;
         private CheckBox chkMonitorProcesses;
+        private CheckBox chkBlockTempApps;
         private Button btnHardenFirewall;
         private Button btnClearRules;
         private Label lblStatus;
@@ -87,6 +111,8 @@ namespace ExeShield
         private readonly List<TcpListener> tcpListeners = new List<TcpListener>();
         private readonly List<UdpClient> udpListeners = new List<UdpClient>();
         private readonly HashSet<string> blockedIps = new HashSet<string>();
+        private readonly HashSet<string> blockedPrograms = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<string> alertedProgramPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> alertedConnections = new HashSet<string>();
         private readonly HashSet<int> inspectedPids = new HashSet<int>();
         private readonly object syncLock = new object();
@@ -94,21 +120,26 @@ namespace ExeShield
         public MainForm()
         {
             InitializeUi();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
             StartProtection();
         }
 
         private void InitializeUi()
         {
-            this.Text = "EXE.exe - Bouclier Reseau & Anti-Intrusion (Concept AntiNuke)";
-            this.Size = new Size(920, 580);
-            this.MinimumSize = new Size(800, 480);
+            this.Text = "EXE.exe — Encrypted_X-Environnement (Bouclier Reseau Windows)";
+            this.Size = new Size(940, 580);
+            this.MinimumSize = new Size(840, 480);
             this.BackColor = Color.FromArgb(24, 26, 32);
             this.ForeColor = Color.WhiteSmoke;
             this.Icon = SystemIcons.Shield;
 
             Panel topPanel = new Panel();
             topPanel.Dock = DockStyle.Top;
-            topPanel.Height = 95;
+            topPanel.Height = 98;
             topPanel.BackColor = Color.FromArgb(32, 35, 44);
             topPanel.Padding = new Padding(10);
 
@@ -128,22 +159,29 @@ namespace ExeShield
             chkIgnoreLan = new CheckBox();
             chkIgnoreLan.Text = "Ignorer le reseau local (LAN / Box)";
             chkIgnoreLan.Checked = true;
-            chkIgnoreLan.Location = new Point(280, 38);
+            chkIgnoreLan.Location = new Point(295, 38);
             chkIgnoreLan.AutoSize = true;
 
             chkMonitorProcesses = new CheckBox();
             chkMonitorProcesses.Text = "Surveiller processus & scripts suspects";
             chkMonitorProcesses.Checked = true;
-            chkMonitorProcesses.Location = new Point(14, 62);
+            chkMonitorProcesses.Location = new Point(14, 64);
             chkMonitorProcesses.AutoSize = true;
+
+            chkBlockTempApps = new CheckBox();
+            chkBlockTempApps.Text = "Bloquer reseau des .exe dans Temp";
+            chkBlockTempApps.Checked = false; // Evite de couper les installeurs legitimes par defaut
+            chkBlockTempApps.Location = new Point(295, 64);
+            chkBlockTempApps.AutoSize = true;
 
             btnHardenFirewall = new Button();
             btnHardenFirewall.Text = "Durcir Pare-feu (Bloquer SMB/139/RDP externes)";
             btnHardenFirewall.BackColor = Color.FromArgb(180, 55, 55);
             btnHardenFirewall.ForeColor = Color.White;
             btnHardenFirewall.FlatStyle = FlatStyle.Flat;
-            btnHardenFirewall.Size = new Size(300, 30);
-            btnHardenFirewall.Location = new Point(580, 12);
+            btnHardenFirewall.Size = new Size(310, 30);
+            btnHardenFirewall.Location = new Point(595, 12);
+            btnHardenFirewall.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnHardenFirewall.Click += new EventHandler(BtnHardenFirewall_Click);
 
             btnClearRules = new Button();
@@ -151,14 +189,16 @@ namespace ExeShield
             btnClearRules.BackColor = Color.FromArgb(60, 65, 80);
             btnClearRules.ForeColor = Color.White;
             btnClearRules.FlatStyle = FlatStyle.Flat;
-            btnClearRules.Size = new Size(300, 30);
-            btnClearRules.Location = new Point(580, 50);
+            btnClearRules.Size = new Size(310, 30);
+            btnClearRules.Location = new Point(595, 50);
+            btnClearRules.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnClearRules.Click += new EventHandler(BtnClearRules_Click);
 
             topPanel.Controls.Add(lblStatus);
             topPanel.Controls.Add(chkAutoBlockIp);
             topPanel.Controls.Add(chkIgnoreLan);
             topPanel.Controls.Add(chkMonitorProcesses);
+            topPanel.Controls.Add(chkBlockTempApps);
             topPanel.Controls.Add(btnHardenFirewall);
             topPanel.Controls.Add(btnClearRules);
 
@@ -226,7 +266,11 @@ namespace ExeShield
         private void ExitApplication()
         {
             isRunning = false;
-            trayIcon.Visible = false;
+            if (trayIcon != null)
+            {
+                trayIcon.Visible = false;
+                trayIcon.Dispose();
+            }
             StopListeners();
             Application.Exit();
         }
@@ -237,13 +281,13 @@ namespace ExeShield
             {
                 e.Cancel = true;
                 this.Hide();
-                trayIcon.ShowBalloonTip(2500, "EXE.exe reste actif", "La surveillance des ports et virus continue en arriere-plan.", ToolTipIcon.Info);
+                trayIcon.ShowBalloonTip(2500, "EXE.exe reste actif", "La surveillance des ports et processus continue en arriere-plan.", ToolTipIcon.Info);
             }
         }
 
         private void StartProtection()
         {
-            Log("[INIT] Demarrage de EXE.exe...", Color.Cyan);
+            Log("[INIT] Demarrage de EXE.exe (Encrypted_X-Environnement)...", Color.Cyan);
 
             // 1. Demarrage des pieges TCP
             foreach (int port in MonitoredTcpPorts)
@@ -284,13 +328,13 @@ namespace ExeShield
                     {
                         try
                         {
-                            TcpClient client = listener.AcceptTcpClient();
-                            IPEndPoint remote = client.Client.RemoteEndPoint as IPEndPoint;
-                            client.Close();
-
-                            if (remote != null)
+                            using (TcpClient client = listener.AcceptTcpClient())
                             {
-                                HandleThreatConnection(remote.Address.ToString(), port, "TCP-TRAP", null);
+                                IPEndPoint remote = client.Client.RemoteEndPoint as IPEndPoint;
+                                if (remote != null)
+                                {
+                                    HandleThreatConnection(remote.Address.ToString(), port, "TCP-TRAP", null);
+                                }
                             }
                         }
                         catch
@@ -366,6 +410,10 @@ namespace ExeShield
                     List<TcpRowInfo> tcpRows = GetAllTcpConnections();
                     foreach (TcpRowInfo row in tcpRows)
                     {
+                        // 3 = SYN_SENT, 4 = SYN_RCVD, 5 = ESTABLISHED (evite LISTEN/TIME_WAIT/spam)
+                        if (row.State != 3 && row.State != 4 && row.State != 5)
+                            continue;
+
                         if (row.RemoteAddress.Equals(IPAddress.Any) || IPAddress.IsLoopback(row.RemoteAddress))
                             continue;
 
@@ -374,8 +422,8 @@ namespace ExeShield
 
                         if (isWatchedLocal || isMalwareRemote)
                         {
-                            string key = string.Format("{0}:{1}->{2}:{3}:{4}",
-                                row.LocalPort, row.RemoteAddress, row.RemotePort, row.Pid, row.State);
+                            string key = string.Format("{0}:{1}->{2}:{3}",
+                                row.LocalPort, row.RemoteAddress, row.RemotePort, row.Pid);
 
                             bool isNew = false;
                             lock (syncLock)
@@ -415,50 +463,67 @@ namespace ExeShield
                         Process[] procs = Process.GetProcesses();
                         foreach (Process p in procs)
                         {
-                            bool shouldCheck = false;
-                            lock (syncLock)
+                            using (p)
                             {
-                                if (!inspectedPids.Contains(p.Id))
+                                bool shouldCheck = false;
+                                lock (syncLock)
                                 {
-                                    inspectedPids.Add(p.Id);
-                                    if (inspectedPids.Count > 5000) inspectedPids.Clear();
-                                    shouldCheck = true;
-                                }
-                            }
-
-                            if (!shouldCheck) continue;
-
-                            try
-                            {
-                                string exePath = p.MainModule.FileName;
-                                string fileName = Path.GetFileName(exePath);
-                                string lowerPath = exePath.ToLowerInvariant();
-
-                                bool suspiciousLocation =
-                                    lowerPath.Contains("\\appdata\\local\\temp\\") ||
-                                    lowerPath.Contains("\\users\\public\\") ||
-                                    lowerPath.Contains("\\$recycle.bin\\");
-
-                                if (suspiciousLocation)
-                                {
-                                    string sha = ComputeSha256Safe(exePath);
-                                    Log(string.Format("[PROCESSUS SUSPECT] {0} (PID {1}) lance depuis dossier sensible : {2} | SHA256={3}",
-                                        fileName, p.Id, exePath, sha), Color.Orange);
-
-                                    if (chkAutoBlockIp.Checked)
+                                    if (!inspectedPids.Contains(p.Id))
                                     {
-                                        BlockProgramInFirewall(exePath, fileName);
+                                        inspectedPids.Add(p.Id);
+                                        if (inspectedPids.Count > 5000) inspectedPids.Clear();
+                                        shouldCheck = true;
                                     }
+                                }
 
-                                    NotifyUser("Processus suspect detecte", fileName + " lance depuis un dossier temporaire/public.", ToolTipIcon.Warning);
-                                }
-                                else if (SuspectParents.Contains(fileName))
+                                if (!shouldCheck) continue;
+
+                                try
                                 {
-                                    // Journaliser discretememt les moteurs de script utilises par les malwares
-                                    Log(string.Format("[SCRIPT SURVEILLE] {0} (PID {1}) demarre.", fileName, p.Id), Color.Khaki);
+                                    string exePath = p.MainModule.FileName;
+                                    string fileName = Path.GetFileName(exePath);
+                                    string lowerPath = exePath.ToLowerInvariant();
+
+                                    bool inTemp = lowerPath.Contains("\\appdata\\local\\temp\\");
+                                    bool inHighRisk =
+                                        lowerPath.Contains("\\users\\public\\") ||
+                                        lowerPath.Contains("\\$recycle.bin\\");
+
+                                    if (inTemp || inHighRisk)
+                                    {
+                                        bool firstAlert = false;
+                                        lock (syncLock)
+                                        {
+                                            if (!alertedProgramPaths.Contains(exePath))
+                                            {
+                                                alertedProgramPaths.Add(exePath);
+                                                if (alertedProgramPaths.Count > 2000) alertedProgramPaths.Clear();
+                                                firstAlert = true;
+                                            }
+                                        }
+
+                                        if (firstAlert)
+                                        {
+                                            string sha = ComputeSha256Safe(exePath);
+                                            Log(string.Format("[PROCESSUS SUSPECT] {0} (PID {1}) lance depuis dossier sensible : {2} | SHA256={3}",
+                                                fileName, p.Id, exePath, sha), Color.Orange);
+
+                                            NotifyUser("Processus suspect detecte", fileName + " lance depuis un dossier sensible.", ToolTipIcon.Warning);
+                                        }
+
+                                        bool shouldBlock = inHighRisk || (inTemp && chkBlockTempApps.Checked);
+                                        if (shouldBlock && chkAutoBlockIp.Checked)
+                                        {
+                                            BlockProgramInFirewall(exePath, fileName);
+                                        }
+                                    }
+                                    else if (SuspectParents.Contains(fileName))
+                                    {
+                                        Log(string.Format("[SCRIPT SURVEILLE] {0} (PID {1}) demarre.", fileName, p.Id), Color.Khaki);
+                                    }
                                 }
+                                catch { }
                             }
-                            catch { }
                         }
                     }
                     catch { }
@@ -499,20 +564,36 @@ namespace ExeShield
             }
 
             string ruleName = "EXE_Shield_Block_" + ip.Replace(":", "_");
+            RunNetsh(string.Format("advfirewall firewall delete rule name=\"{0}_IN\"", ruleName));
+            RunNetsh(string.Format("advfirewall firewall delete rule name=\"{0}_OUT\"", ruleName));
             RunNetsh(string.Format("advfirewall firewall add rule name=\"{0}_IN\" dir=in action=block remoteip={1}", ruleName, ip));
             RunNetsh(string.Format("advfirewall firewall add rule name=\"{0}_OUT\" dir=out action=block remoteip={1}", ruleName, ip));
 
             Log(string.Format("[BLOQUE] IP {0} bloquee en entree/sortie (Port {1}).", ip, port), Color.Red);
 
-            this.BeginInvoke((MethodInvoker)delegate
+            if (!this.IsDisposed && this.IsHandleCreated)
             {
-                blockedIpList.Items.Add(string.Format("{0} (Port {1})", ip, port));
-            });
+                try
+                {
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        blockedIpList.Items.Add(string.Format("{0} (Port {1})", ip, port));
+                    });
+                }
+                catch { }
+            }
         }
 
         private void BlockProgramInFirewall(string exePath, string name)
         {
+            lock (syncLock)
+            {
+                if (blockedPrograms.Contains(exePath)) return;
+                blockedPrograms.Add(exePath);
+            }
+
             string ruleName = "EXE_Shield_App_" + name + "_" + Math.Abs(exePath.GetHashCode());
+            RunNetsh(string.Format("advfirewall firewall delete rule name=\"{0}\"", ruleName));
             RunNetsh(string.Format("advfirewall firewall add rule name=\"{0}\" dir=out action=block program=\"{1}\"", ruleName, exePath));
             Log(string.Format("[RESEAU COUPE] Acces sortant bloque pour {0}", exePath), Color.Red);
         }
@@ -520,7 +601,7 @@ namespace ExeShield
         private void BtnHardenFirewall_Click(object sender, EventArgs e)
         {
             DialogResult res = MessageBox.Show(
-                "Cela va bloquer les connexions entrantes externes sur les ports les plus attaques par les virus/vers/ransomwares :\n" +
+                "Cela va bloquer les connexions entrantes EXTERNES (LAN local preserve) sur les ports les plus attaques :\n" +
                 "- NetBIOS / WinNuke (TCP/UDP 137, 138, 139)\n" +
                 "- SMB / WannaCry (TCP 445)\n" +
                 "- RPC (TCP 135) & Telnet (TCP 23) & RDP (TCP/UDP 3389)\n\nContinuer ?",
@@ -530,22 +611,71 @@ namespace ExeShield
 
             if (res != DialogResult.Yes) return;
 
-            RunNetsh("advfirewall firewall add rule name=\"EXE_Shield_Harden_TCP\" dir=in action=block protocol=TCP localport=23,135,137,138,139,445,3389");
-            RunNetsh("advfirewall firewall add rule name=\"EXE_Shield_Harden_UDP\" dir=in action=block protocol=UDP localport=137,138,139,3389");
-            Log("[DURCISSEMENT] Regles strictes anti-vers / anti-ransomware appliquees dans le Pare-feu Windows.", Color.LightGreen);
-            NotifyUser("Pare-feu durci", "Ports 23, 135, 137-139, 445 et 3389 bloques en entree.", ToolTipIcon.Info);
+            btnHardenFirewall.Enabled = false;
+            Thread t = new Thread(delegate()
+            {
+                try
+                {
+                    RunNetsh("advfirewall firewall delete rule name=\"EXE_Shield_Harden_TCP\"");
+                    RunNetsh("advfirewall firewall delete rule name=\"EXE_Shield_Harden_UDP\"");
+
+                    RunNetsh("advfirewall firewall add rule name=\"EXE_Shield_Harden_TCP\" dir=in action=block protocol=TCP localport=23,135,137,138,139,445,3389 remoteip=" + ExternalIpv4Ranges);
+                    RunNetsh("advfirewall firewall add rule name=\"EXE_Shield_Harden_UDP\" dir=in action=block protocol=UDP localport=137,138,139,3389 remoteip=" + ExternalIpv4Ranges);
+
+                    Log("[DURCISSEMENT] Regles strictes anti-vers / anti-ransomware appliquees (IPs externes bloquees, LAN preserve).", Color.LightGreen);
+                    NotifyUser("Pare-feu durci", "Ports 23, 135, 137-139, 445 et 3389 bloques en entree externe.", ToolTipIcon.Info);
+                }
+                finally
+                {
+                    if (!this.IsDisposed && this.IsHandleCreated)
+                    {
+                        try { this.BeginInvoke((MethodInvoker)delegate { btnHardenFirewall.Enabled = true; }); } catch { }
+                    }
+                }
+            });
+            t.IsBackground = true;
+            t.Start();
         }
 
         private void BtnClearRules_Click(object sender, EventArgs e)
         {
-            // Supprime les regles creees par EXE.exe via PowerShell/Netsh
-            RunCmd("powershell -NoProfile -Command \"Get-NetFirewallRule -DisplayName 'EXE_Shield_*' -ErrorAction SilentlyContinue | Remove-NetFirewallRule\"");
-            lock (syncLock)
+            btnClearRules.Enabled = false;
+            Thread t = new Thread(delegate()
             {
-                blockedIps.Clear();
-            }
-            blockedIpList.Items.Clear();
-            Log("[NETTOYAGE] Toutes les regles Pare-feu creees par EXE.exe ont ete supprimees.", Color.Cyan);
+                try
+                {
+                    RunCmd("powershell -NoProfile -Command \"Get-NetFirewallRule -DisplayName 'EXE_Shield_*' -ErrorAction SilentlyContinue | Remove-NetFirewallRule\"");
+                    lock (syncLock)
+                    {
+                        blockedIps.Clear();
+                        blockedPrograms.Clear();
+                        alertedConnections.Clear();
+                    }
+
+                    if (!this.IsDisposed && this.IsHandleCreated)
+                    {
+                        try
+                        {
+                            this.BeginInvoke((MethodInvoker)delegate
+                            {
+                                blockedIpList.Items.Clear();
+                            });
+                        }
+                        catch { }
+                    }
+
+                    Log("[NETTOYAGE] Toutes les regles Pare-feu creees par EXE.exe ont ete supprimees.", Color.Cyan);
+                }
+                finally
+                {
+                    if (!this.IsDisposed && this.IsHandleCreated)
+                    {
+                        try { this.BeginInvoke((MethodInvoker)delegate { btnClearRules.Enabled = true; }); } catch { }
+                    }
+                }
+            });
+            t.IsBackground = true;
+            t.Start();
         }
 
         private void RunNetsh(string args)
@@ -555,8 +685,10 @@ namespace ExeShield
                 ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
                 psi.CreateNoWindow = true;
                 psi.UseShellExecute = false;
-                Process p = Process.Start(psi);
-                if (p != null) p.WaitForExit(3000);
+                using (Process p = Process.Start(psi))
+                {
+                    if (p != null) p.WaitForExit(3000);
+                }
             }
             catch { }
         }
@@ -568,8 +700,10 @@ namespace ExeShield
                 ProcessStartInfo psi = new ProcessStartInfo("cmd.exe", "/c " + fullArgs);
                 psi.CreateNoWindow = true;
                 psi.UseShellExecute = false;
-                Process p = Process.Start(psi);
-                if (p != null) p.WaitForExit(5000);
+                using (Process p = Process.Start(psi))
+                {
+                    if (p != null) p.WaitForExit(15000);
+                }
             }
             catch { }
         }
@@ -591,8 +725,10 @@ namespace ExeShield
             {
                 if (pid == 0) return "Idle";
                 if (pid == 4) return "System";
-                Process p = Process.GetProcessById(pid);
-                return p.ProcessName + ".exe";
+                using (Process p = Process.GetProcessById(pid))
+                {
+                    return p.ProcessName + ".exe";
+                }
             }
             catch
             {
@@ -642,11 +778,15 @@ namespace ExeShield
 
         private void NotifyUser(string title, string message, ToolTipIcon icon)
         {
+            if (this.IsDisposed || !this.IsHandleCreated) return;
             try
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
-                    trayIcon.ShowBalloonTip(3000, title, message, icon);
+                    if (trayIcon != null)
+                    {
+                        trayIcon.ShowBalloonTip(3000, title, message, icon);
+                    }
                 });
             }
             catch { }
@@ -655,6 +795,7 @@ namespace ExeShield
         // --- API native Windows (iphlpapi.dll) pour lire toutes les connexions TCP actives ---
         private const int AF_INET = 2;
         private const int TCP_TABLE_OWNER_PID_ALL = 5;
+        private const uint ERROR_INSUFFICIENT_BUFFER = 122;
 
         [DllImport("iphlpapi.dll", SetLastError = true)]
         private static extern uint GetExtendedTcpTable(
@@ -691,35 +832,47 @@ namespace ExeShield
             int bufferSize = 0;
 
             GetExtendedTcpTable(IntPtr.Zero, ref bufferSize, true, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
-            IntPtr tcpTablePtr = Marshal.AllocHGlobal(bufferSize);
+            if (bufferSize <= 0) return result;
 
-            try
+            bufferSize += 4096;
+
+            for (int attempt = 0; attempt < 3; attempt++)
             {
-                uint ret = GetExtendedTcpTable(tcpTablePtr, ref bufferSize, true, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
-                if (ret != 0) return result;
-
-                int rowCount = Marshal.ReadInt32(tcpTablePtr);
-                IntPtr rowPtr = IntPtr.Add(tcpTablePtr, 4);
-                int rowSize = Marshal.SizeOf(typeof(MIB_TCPROW_OWNER_PID));
-
-                for (int i = 0; i < rowCount; i++)
+                IntPtr tcpTablePtr = Marshal.AllocHGlobal(bufferSize);
+                try
                 {
-                    MIB_TCPROW_OWNER_PID row = (MIB_TCPROW_OWNER_PID)Marshal.PtrToStructure(rowPtr, typeof(MIB_TCPROW_OWNER_PID));
+                    uint ret = GetExtendedTcpTable(tcpTablePtr, ref bufferSize, true, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+                    if (ret == ERROR_INSUFFICIENT_BUFFER)
+                    {
+                        bufferSize += 4096;
+                        continue;
+                    }
+                    if (ret != 0) return result;
 
-                    TcpRowInfo info = new TcpRowInfo();
-                    info.State = row.state;
-                    info.RemoteAddress = new IPAddress((long)row.remoteAddr);
-                    info.LocalPort = (int)(((row.localPort & 0xFF) << 8) | ((row.localPort >> 8) & 0xFF));
-                    info.RemotePort = (int)(((row.remotePort & 0xFF) << 8) | ((row.remotePort >> 8) & 0xFF));
-                    info.Pid = (int)row.owningPid;
+                    int rowCount = Marshal.ReadInt32(tcpTablePtr);
+                    IntPtr rowPtr = IntPtr.Add(tcpTablePtr, 4);
+                    int rowSize = Marshal.SizeOf(typeof(MIB_TCPROW_OWNER_PID));
 
-                    result.Add(info);
-                    rowPtr = IntPtr.Add(rowPtr, rowSize);
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        MIB_TCPROW_OWNER_PID row = (MIB_TCPROW_OWNER_PID)Marshal.PtrToStructure(rowPtr, typeof(MIB_TCPROW_OWNER_PID));
+
+                        TcpRowInfo info = new TcpRowInfo();
+                        info.State = row.state;
+                        info.RemoteAddress = new IPAddress((long)row.remoteAddr);
+                        info.LocalPort = (int)(((row.localPort & 0xFF) << 8) | ((row.localPort >> 8) & 0xFF));
+                        info.RemotePort = (int)(((row.remotePort & 0xFF) << 8) | ((row.remotePort >> 8) & 0xFF));
+                        info.Pid = (int)row.owningPid;
+
+                        result.Add(info);
+                        rowPtr = IntPtr.Add(rowPtr, rowSize);
+                    }
+                    break;
                 }
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(tcpTablePtr);
+                finally
+                {
+                    Marshal.FreeHGlobal(tcpTablePtr);
+                }
             }
 
             return result;
