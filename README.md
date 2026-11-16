@@ -8,13 +8,13 @@
 
 **Inspiré du concept historique *AntiNuke.exe* (1997), modernisé pour contrer les vers, ransomwares, RAT et scans réseau sous Windows 10/11.**
 
-[![GitHub Release](https://img.shields.io/github/v/release/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&logo=github&color=crimson)](https://github.com/teremuhamblin/EXE.exe/releases)
-[![Dernier Commit](https://img.shields.io/github/last-commit/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&logo=git&color=blue)](https://github.com/teremuhamblin/EXE.exe/commits)
-[![GitHub Stars](https://img.shields.io/github/stars/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=gold)](https://github.com/teremuhamblin/EXE.exe/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=orange)](https://github.com/teremuhamblin/EXE.exe/issues)
-[![Licence](https://img.shields.io/github/license/VOTRE_PSEUDO/EXE-Shield?style=for-the-badge&color=brightgreen)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/teremuhamblin/EXE.exe?style=for-the-badge&logo=github&color=crimson)](https://github.com/teremuhamblin/EXE.exe/releases)
+[![Dernier Commit](https://img.shields.io/github/last-commit/teremuhamblin/EXE.exe?style=for-the-badge&logo=git&color=blue)](https://github.com/teremuhamblin/EXE.exe/commits)
+[![GitHub Stars](https://img.shields.io/github/stars/teremuhamblin/EXE.exe?style=for-the-badge&color=gold)](https://github.com/teremuhamblin/EXE.exe/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/teremuhamblin/EXE.exe?style=for-the-badge&color=orange)](https://github.com/teremuhamblin/EXE.exe/issues)
+[![Licence](https://img.shields.io/github/license/teremuhamblin/EXE.exe?style=for-the-badge&color=brightgreen)](LICENSE)
 
-![Plateforme](https://img.shields.io/badge/Plateforme-Windows%2010%20%2F%2011-0078D6?style=flat-square&logo=windows)
+![Plateforme](https://img.shields.io/badge/Plateforme-Windows%2010%20%2F%2011-512BD4?style=flat-square&logo=windows)
 ![Langage](https://img.shields.io/badge/Langage-C%23%20(.NET%20Framework%204.x)-512BD4?style=flat-square&logo=dotnet)
 ![Dépendances](https://img.shields.io/badge/D%C3%A9pendances-Z%C3%A9ro%20externe-success?style=flat-square)
 ![Statut](https://img.shields.io/badge/Statut-Actif%20%26%20D%C3%A9fensif-critical?style=flat-square)
