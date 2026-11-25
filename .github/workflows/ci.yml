@@ -6,69 +6,65 @@ on:
     tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch: # Permet de lancer la compilation manuellement sur GitHub
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: Compilation Windows (.NET Framework 4.x / csc.exe)
     runs-on: windows-latest
+    timeout-minutes: 10
 
     steps:
-      - name: 📥 Récupération du dépôt
+      - name: Récupération du dépôt
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - name: 🔧 Ajout de csc.exe (.NET Framework 4.x) au PATH
+      - name: Ajout de csc.exe au PATH
         shell: pwsh
         run: |
           $cscDir = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
           if (Test-Path "$cscDir\csc.exe") {
             $cscDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-            Write-Host "Compilateur trouvé : $cscDir\csc.exe"
           } else {
             Write-Error "csc.exe introuvable dans $cscDir"
             exit 1
           }
 
-      - name: 🛠️ Compilation via build.bat
+      - name: Compilation via build.bat
         shell: cmd
         run: |
           call build.bat
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-      - name: 🔍 Vérification de EXE.exe & calcul SHA-256
+      - name: Vérification du binaire et calcul SHA-256
         shell: pwsh
         run: |
-          if (-not (Test-Path ".\EXE.exe")) {
-            Write-Error "Erreur : EXE.exe n'a pas été généré à la racine !"
-            exit 1
-          }
-
-          $file = Get-Item ".\EXE.exe"
-          if ($file.Length -eq 0) {
-            Write-Error "Erreur : EXE.exe est vide (0 octet) !"
-            exit 1
-          }
-
-          # Vérifie que le fichier compilé est bien un exécutable .NET valide
-          $asm = [System.Reflection.AssemblyName]::GetAssemblyName($file.FullName)
+          $filePath = ".\EXE.exe"
+          if (-not (Test-Path $filePath)) { throw "EXE.exe n'a pas été généré." }
+          $file = Get-Item $filePath
+          if ($file.Length -eq 0) { throw "EXE.exe est vide." }
+          $assembly = [System.Reflection.AssemblyName]::GetAssemblyName($file.FullName)
           $hash = (Get-FileHash $file.FullName -Algorithm SHA256).Hash
-
           "$hash  EXE.exe" | Out-File -FilePath ".\EXE.exe.sha256" -Encoding ascii
-
           @(
-            '### 🛡️ Build EXE.exe réussi',
+            '### Build EXE.exe réussi',
             '| Propriété | Valeur |',
             '| :--- | :--- |',
-            '| **Fichier** | `EXE.exe` |',
-            "| **Taille** | $($file.Length) octets |",
-            ('| **Assembly** | `{0}` |' -f $asm.FullName),
-            ('| **SHA-256** | `{0}` |' -f $hash)
+            '| Fichier | `EXE.exe` |',
+            "| Taille | $($file.Length) octets |",
+            ('| Assembly | `{0}` |' -f $assembly.FullName),
+            ('| SHA-256 | `{0}` |' -f $hash)
           ) -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
 
-      - name: 📦 Sauvegarde de l'artefact (EXE.exe + SHA-256)
+      - name: Sauvegarde de l'artefact
         uses: actions/upload-artifact@v7
         with:
           name: EXE-Windows-Build
