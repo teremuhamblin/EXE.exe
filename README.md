@@ -3,10 +3,17 @@
 # 🛡️ EXE.exe
 ### Bouclier réseau & détection locale pour Windows
 
-**Version 1.5 Stable** · Surveillance TCP/UDP · Analyse des connexions · Actions Pare-feu Windows
+**Version **1.5 Stable** · Surveillance TCP/UDP · Analyse des connexions · Actions Pare-feu Windows
+
+---
+---
 
 [![Build](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml/badge.svg)](https://github.com/teremuhamblin/EXE.exe/actions/workflows/codeql.yml)
+
+---
+---
+
 [![Dernière release](https://img.shields.io/github/v/release/teremuhamblin/EXE.exe?style=for-the-badge&logo=github&color=8b5cf6)](https://github.com/teremuhamblin/EXE.exe/releases)
 [![Licence MIT](https://img.shields.io/github/license/teremuhamblin/EXE.exe?style=for-the-badge&color=06b6d4)](LICENSE)
 [![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)](#-configuration-requise)
@@ -24,6 +31,7 @@
 
 </div>
 
+---
 ---
 
 ## ✨ Présentation
