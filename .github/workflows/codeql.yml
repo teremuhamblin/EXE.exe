@@ -6,34 +6,41 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: "30 6 * * 1" # Analyse automatique chaque lundi à 06h30 UTC
+    - cron: "30 6 * * 1"
 
 permissions:
   actions: read
   contents: read
   security-events: write
 
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyse CodeQL (C# & Actions)
     runs-on: windows-latest
+    timeout-minutes: 30
 
     steps:
-      - name: 📥 Récupération du dépôt
+      - name: Récupération du dépôt
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - name: 🔍 Initialisation de CodeQL
+      - name: Initialisation de CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: csharp, actions
 
-      - name: 🛠️ Compilation tracée pour CodeQL (build.bat)
+      - name: Compilation tracée
         shell: cmd
         run: |
           call build.bat
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-      - name: 🛡️ Exécution de l'analyse CodeQL
+      - name: Analyse CodeQL
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp-actions"
