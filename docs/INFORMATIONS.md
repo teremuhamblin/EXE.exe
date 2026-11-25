@@ -1,24 +1,37 @@
-###### docs/INFORMATION.md >> markdown
-# EXE.exe
-- 》》 *v1.4 Stable*
+# EXE.exe — Informations techniques
 
-###### L'intégralité du projet prêt à compiler sous Windows 10 / Windows 11 pour obtenir votre fichier EXE.exe en quelques secondes, sans aucun logiciel externe à installer (*en utilisant le compilateur .NET déjà intégré à Windows*).
-##### Ce que fait votre projet EXE.exe (concept AntiNuke modernisé). Sur Windows moderne, le port 139 (et 445) est déjà occupé par le système : un simple programme d’écoute classique échoue donc souvent à le surveiller. EXE.exe contourne ce problème et va beaucoup plus loin que l’ancien AntiNuke.exe :
-- Pièges réseau multi-ports (Honeypot TCP & UDP) :
-   
-   - Écoute les tentatives de connexion sur les ports cibles de vers, scanners et vieux/nouveaux chevaux de Troie (21, 23, 135, 137, 138, 139, 445, 1433, 3389, 4444, 5555, 5900, 6667, 11223, 12345, 27374, 31337, etc.).
-   
-   - Inspection en direct de la pile réseau Windows (iphlpapi.dll) :
-Surveille en temps réel toutes les connexions actives (même sur les ports 139 et 445 déjà gérés par Windows), identifie le processus (.exe) qui communique et l'IP distante.
+> Documentation du dépôt pour la version 1.5. Vérifiez la page [Releases](https://github.com/teremuhamblin/EXE.exe/releases) pour distinguer cette version de documentation d'une release effectivement publiée.
 
-- Blocage automatique dans le Pare-feu Windows :
-   - Dès qu’une IP distante sonde un port sensible ou qu’un malware tente une connexion sur un port de contrôle (RAT / Backdoor), EXE.exe crée automatiquement une règle de blocage dans le Pare-feu Windows (avec option pour préserver le réseau local/LAN).
-   
-   - Bouton « Durcissement Anti-Vers / Anti-Ransomware » :
-Bloque d'un clic les vecteurs d’attaques réseau les plus exploités par les virus (NetBIOS 137-139, SMB/EternalBlue 445, RPC 135, RDP 3389, Telnet 23).
+## Objectif
 
-- Détection comportementale de processus suspects :
-   - Repère les exécutables lancés depuis des zones à risque (%TEMP%, Public, Recycle.Bin) ou les scripts suspects (powershell, mshta, wscript, cscript, rundll32) ouvrant des connexions externes, affiche leur hash SHA-256 et permet de bloquer leur accès réseau ou de couper le processus.
+EXE.exe est une application Windows de surveillance réseau et d'interaction avec le Pare-feu Windows, inspirée du concept historique AntiNuke. Elle combine une interface Windows Forms, des écouteurs TCP/UDP sur les ports disponibles et la lecture de la table des connexions TCP via `GetExtendedTcpTable` dans `iphlpapi.dll`.
 
-- Alertes temps réel & icône dans la barre des tâches :
-   - Notifications Windows instantanées à chaque menace détectée/bloquée, comme le faisait AntiNuke.
+## Comportements implémentés
+
+- Tente d'écouter certains ports TCP et UDP configurés dans `src/Program.cs`. Un port occupé ou inaccessible n'est pas pris par l'application.
+- Parcourt périodiquement les connexions TCP IPv4 et associe les entrées à leur PID lorsque les données sont disponibles.
+- Peut ajouter des règles de blocage via `netsh advfirewall` selon les options et événements observés.
+- Propose une action de durcissement du pare-feu et une action de suppression de règles dont le nom correspond au préfixe de l'application.
+- Surveille les processus et calcule le SHA-256 de certains exécutables localisés dans des dossiers ciblés.
+- Affiche les alertes dans l'interface et la zone de notification Windows.
+
+## Limites importantes
+
+- La surveillance d'une connexion ou d'un port n'établit pas à elle seule qu'une activité est malveillante. Des faux positifs sont possibles.
+- La liste de ports est une heuristique et n'est pas une signature de malware.
+- Les règles de filtrage peuvent modifier la connectivité de l'ordinateur. Vérifiez chaque changement et conservez un moyen de récupération.
+- Le comportement dépend de Windows, des permissions, des ports déjà utilisés, du profil réseau et des autres règles installées.
+- Le manifeste `src/app.manifest` demande actuellement l'élévation administrateur au lancement.
+- Cette application ne remplace pas un antivirus, un EDR ou les protections intégrées à Windows.
+
+## Compiler
+
+Depuis un terminal Windows, à la racine du dépôt :
+
+```bat
+build.bat
+```
+
+* *Le script cherche **csc.exe** dans les emplacements **.NET Framework** usuels, compile d'abord vers un fichier temporaire et ne remplace *EXE.exe* qu'après une compilation réussie*.
+
+* *Consultez également le README, la politique de sécurité et le guide de contribution*.
