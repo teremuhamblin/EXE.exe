@@ -1,30 +1,32 @@
-# 🚨 Politique de sécurité (`SECURITY.md`)
+# 🔐 Politique de sécurité
 
-## 📌 Versions prises en charge
+## Versions concernées
 
-| Version | Statut de support |
-| :--- | :--- |
-| `1.0.x` | ✅ Supportée activement |
-| `< 1.0` | ❌ Non supportée |
+Le projet est en cours de maintenance autour de la version **1.5**. Les versions antérieures peuvent ne plus recevoir de correctifs ; utilisez la dernière version publiée et consultez les notes de version. Une version indiquée dans le README n'est pas nécessairement une release publiée : vérifiez la page [Releases](https://github.com/teremuhamblin/EXE.exe/releases).
 
-## 🛡️ Périmètre & limites
+## Portée et limites
 
-`EXE.exe` s'exécute avec des **privilèges Administrateur** afin de lire la table réseau Windows et de configurer le Pare-feu Windows. Une attention particulière est donc portée à :
-- L'absence d'injection de commandes via `netsh` ou `powershell`.
-- La validation stricte des adresses IP et des chemins d'exécutables avant toute action.
-- La non-exécution automatique de binaires tiers.
+EXE.exe interagit avec des informations de connexions réseau, des processus locaux et le Pare-feu Windows. Le manifeste demande actuellement des privilèges administrateur au démarrage. N'exécutez l'application que si vous avez examiné et approuvé le code et le binaire utilisés.
 
-## 📩 Signaler une vulnérabilité
+EXE.exe est un outil complémentaire de surveillance. Il ne garantit pas la détection ou le blocage de toutes les menaces et ne remplace ni un antivirus, ni les protections Windows, ni les bonnes pratiques de sauvegarde. Les règles de pare-feu peuvent interrompre des communications légitimes. Vérifiez leur portée et leurs effets avant de les appliquer ou de les supprimer.
 
-**Merci de ne pas publier de faille de sécurité dans une Issue publique.**
+Les rapports de sécurité doivent notamment préciser, dans la mesure du possible :
 
-Pour signaler une vulnérabilité de manière responsable :
-1. Utilisez l'onglet **Security → Advisories → Report a vulnerability** du dépôt GitHub (recommandé), **ou**
-2. Contactez directement le mainteneur principal indiqué dans `MAINTAINERS.md`.
+- la version ou le commit concerné et la version de Windows ;
+- les étapes de reproduction et le comportement observé ;
+- l'impact potentiel et les journaux pertinents, après suppression de toute donnée sensible.
 
-### Ce que nous attendons dans votre signalement
-- Description détaillée de la faille et impact potentiel (ex. contournement du blocage, exécution de commande, plantage/DoS local).
-- Étapes reproductibles pour vérifier le problème.
-- Toute piste de correctif si vous en avez une.
+Ne joignez pas de secrets, de données personnelles, d'adresses IP publiques sensibles ou de fichiers malveillants non nécessaires au diagnostic.
 
-Nous nous engageons à accuser réception sous **72 heures** et à publier un correctif dans les meilleurs délais.
+## Signaler une vulnérabilité
+
+**Ne publiez pas une vulnérabilité non corrigée dans une Issue publique.** Utilisez la fonction privée **Security → Advisories → Report a vulnerability** du dépôt GitHub. Si cette fonction n'est pas disponible, contactez le mainteneur via les coordonnées de [MAINTAINERS.md](MAINTAINERS.md).
+
+Nous accuserons réception et coordonnerons la divulgation dès que possible. Aucun délai de réponse ou de correction n'est garanti ; les échéances dépendront de la gravité et des éléments disponibles.
+
+## Utilisation responsable
+
+- Téléchargez les sources et releases uniquement depuis le dépôt officiel.
+- Examinez les changements et le script `build.bat` avant compilation ; vérifiez le SHA-256 publié lorsqu'un checksum est disponible.
+- Testez les changements de pare-feu dans un environnement maîtrisé et conservez un moyen de restaurer la configuration.
+- Accordez les privilèges élevés uniquement à un binaire de confiance.
